@@ -111,6 +111,7 @@ def generate(
     ),
     num_gpus: int = typer.Option(1, help="The number of GPUs to use."),
     num_threads: int = typer.Option(1, help="The number of threads to use."),
+    max_model_len: int = typer.Option(None, help="The maximum length of model"),
     gpu_memory_utilization: float = typer.Option(0.9, help="The GPU memory utilization."),
     backend: str = typer.Option("vllm", help="The backend to use for the model."),
     result_dir: str = typer.Option(
@@ -142,6 +143,7 @@ def generate(
         exclude_state_log=exclude_state_log,
         num_gpus=num_gpus,
         num_threads=num_threads,
+        max_model_len=max_model_len,
         gpu_memory_utilization=gpu_memory_utilization,
         backend=backend,
         result_dir=result_dir,

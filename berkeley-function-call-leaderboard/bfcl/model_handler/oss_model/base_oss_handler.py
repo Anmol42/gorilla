@@ -54,6 +54,7 @@ class OSSHandler(BaseHandler, EnforceOverrides):
         num_gpus: int,
         gpu_memory_utilization: float,
         backend: str,
+        max_model_len: int,
         include_input_log: bool,
         exclude_state_log: bool,
         update_mode: bool,
@@ -76,11 +77,12 @@ class OSSHandler(BaseHandler, EnforceOverrides):
                 raise ValueError(
                     "Model does not have a max_position_embeddings attribute or tokenizer.model_max_length attribute. Please set the max_context_length attribute in the corresponding model handler."
                 )
+        if not max_model_len:
+            self.max_context_length = max_model_len
         print(f"Max context length: {self.max_context_length}")
 
         if backend == "vllm":
-            process = subprocess.Popen(
-                [
+            command_list = [
                     "vllm",
                     "serve",
                     str(self.model_name_huggingface),
@@ -92,8 +94,12 @@ class OSSHandler(BaseHandler, EnforceOverrides):
                     str(num_gpus),
                     "--gpu-memory-utilization",
                     str(gpu_memory_utilization),
-                    "--trust-remote-code",
-                ],
+                    # "--trust-remote-code",
+                ]
+            if not max_model_len:
+                command_list = ["--max-model-len", str(max_model_len)]
+            process = subprocess.Popen(
+                command_list,
                 stdout=subprocess.PIPE,  # Capture stdout
                 stderr=subprocess.PIPE,  # Capture stderr
                 text=True,  # To get the output as text instead of bytes
@@ -185,7 +191,7 @@ class OSSHandler(BaseHandler, EnforceOverrides):
 
             # Once the server is ready, make the completion requests
             futures = []
-            with ThreadPoolExecutor(max_workers=100) as executor:
+            with ThreadPoolExecutor() as executor:
                 with tqdm(
                     total=len(test_entries),
                     desc=f"Generating results for {self.model_name}",

@@ -12,6 +12,7 @@ from bfcl.model_handler.oss_model.minicpm import MiniCPMHandler
 from bfcl.model_handler.oss_model.minicpm_fc import MiniCPMFCHandler
 from bfcl.model_handler.oss_model.phi import PhiHandler
 from bfcl.model_handler.oss_model.qwen import QwenHandler
+from bfcl.model_handler.oss_model.internlm import InternLMHandler
 from bfcl.model_handler.oss_model.salesforce import SalesforceHandler
 from bfcl.model_handler.proprietary_model.claude import ClaudeHandler
 from bfcl.model_handler.proprietary_model.cohere import CohereHandler
@@ -96,6 +97,7 @@ api_inference_handler_map = {
     # "yi-large-fc": YiHandler,  #  Their API is under maintenance, and will not be back online in the near future
     "palmyra-x-004": WriterHandler,
     "grok-beta": GrokHandler,
+    "internlm/internlm2_5-1_8b-chat": InternLMHandler,
 }
 
 # Inference through local hosting

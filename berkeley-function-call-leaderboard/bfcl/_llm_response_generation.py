@@ -45,6 +45,7 @@ def get_args():
     parser.add_argument("--num-threads", default=1, type=int)
     parser.add_argument("--num-gpus", default=1, type=int)
     parser.add_argument("--backend", default="vllm", type=str, choices=["vllm", "sglang"])
+    parser.add_argument("--max-model-len", type=int, help="Give max model length as in vllm")
     parser.add_argument("--gpu-memory-utilization", default=0.9, type=float)
     parser.add_argument("--result-dir", default=None, type=str)
     parser.add_argument("--run-ids", action="store_true", default=False)
@@ -224,6 +225,7 @@ def generate_results(args, model_name, test_cases_total):
             num_gpus=args.num_gpus,
             gpu_memory_utilization=args.gpu_memory_utilization,
             backend=args.backend,
+            max_model_len=args.max_model_len,
             include_input_log=args.include_input_log,
             exclude_state_log=args.exclude_state_log,
             result_dir=args.result_dir,
